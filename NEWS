@@ -18,6 +18,7 @@ master:
   `CLASS=User rake paperclip:refresh:fingerprints`
   You can optionally limit the attachment that will be processed, e.g:
   `CLASS=User ATTACHMENT=avatar rake paperclip:refresh:fingerprints`
+* Improvement: Added support for preferred gem for s3 `aws-sdk-s3`
 
 5.1.0 (2016-08-19):
 
