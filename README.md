@@ -470,7 +470,11 @@ module YourApp
   class Application < Rails::Application
     # Other code...
 
-    config.paperclip_defaults = { storage: :fog, fog_credentials: { provider: "Local", local_root: "#{Rails.root}/public"}, fog_directory: "", fog_host: "localhost"}
+    config.paperclip_defaults = { storage: :fog,
+                                  fog_credentials: { provider: "Local", local_root: "#{Rails.root}/public"}, 
+                                  fog_directory: "", 
+                                  fog_host: "localhost",
+                                  default_url: "/:attachment/:style/missing.png" }
   end
 end
 ```
@@ -484,6 +488,7 @@ Paperclip::Attachment.default_options[:storage] = :fog
 Paperclip::Attachment.default_options[:fog_credentials] = { provider: "Local", local_root: "#{Rails.root}/public"}
 Paperclip::Attachment.default_options[:fog_directory] = ""
 Paperclip::Attachment.default_options[:fog_host] = "http://localhost:3000"
+Paperclip::Attachment.default_options[:default_url] = "/:attachment/:style/missing.png"
 ```
 ---
 
@@ -563,7 +568,7 @@ Storage
 Paperclip ships with 3 storage adapters:
 
 * File Storage
-* S3 Storage (via `aws-sdk`)
+* S3 Storage (via `aws-sdk-s3`)
 * Fog Storage
 
 If you would like to use Paperclip with another storage, you can install these
@@ -589,10 +594,10 @@ _**NOTE**: This is a change from previous versions of Paperclip, but is overall 
 safer choice for the default file store._
 
 You may also choose to store your files using Amazon's S3 service. To do so, include
-the `aws-sdk` gem in your Gemfile:
+the `aws-sdk-s3` gem in your Gemfile:
 
 ```ruby
-gem 'aws-sdk', '~> 2.3.0'
+gem 'aws-sdk-s3'
 ```
 
 And then you can specify using S3 from `has_attached_file`.
@@ -955,7 +960,7 @@ similar mechanism for whichever parallel testing library you use.
 
 **Integration Tests**
 
-Using integration tests with FactoryGirl may save multiple copies of
+Using integration tests with FactoryBot may save multiple copies of
 your test files within the app. To avoid this, specify a custom path in
 the `config/environments/test.rb` like so:
 
@@ -972,11 +977,11 @@ config.after(:suite) do
 end
 ```
 
-**Example of test configuration with Factory Girl**
+**Example of test configuration with Factory Bot**
 
 
 ```ruby
-FactoryGirl.define do
+FactoryBot.define do
   factory :user do
     avatar { File.new("#{Rails.root}/spec/support/fixtures/image.jpg") }
   end
